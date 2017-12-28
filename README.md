@@ -1,2 +1,2 @@
-# node-hello-world
-Docker node.js hello-world repository.
+# node-echo-server
+Docker node.js echo-server repository.

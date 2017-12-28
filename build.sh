@@ -2,7 +2,7 @@
 
 buildtarget()
 {
-	command="docker build -t polyverse/node-hello-world -t internal.hub.polyverse.io/node-hello-world ."
+	command="docker build -t polyverse/node-echo-server -t internal.hub.polyverse.io/node-echo-server ."
 	echo $command
 	$command
 }
@@ -10,6 +10,6 @@ buildtarget()
 	buildtarget "$@"
 
 if [ "$1" == "-p" ]; then
-	docker push polyverse/node-hello-world
-	docker push internal.hub.polyverse.io/node-hello-world
+	docker push polyverse/node-echo-server
+	docker push internal.hub.polyverse.io/node-echo-server
 fi
