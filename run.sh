@@ -16,5 +16,4 @@ if [ $# -ne 0 ]; then
 fi
 
 # Use this command to run
-docker run -d --rm --privileged --name node-echo-server -p 8080:8080 -p 8008:8008 polyverse/node-echo-server
-
+docker run -d --rm --name node-echo-server -p 8080:8080 polyverse/node-echo-server
