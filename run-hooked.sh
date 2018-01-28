@@ -1,17 +1,29 @@
 #!/bin/bash
-REPOSITORY=polyverse/readhook
-RELEASE_TAG=$1
+declare -r	repository=polyverse/readhook
+declare -r -a	assets=(basehook.so fullhook.so)
+declare		tag=$1
 
-if [[ "$RELEASE_TAG" == "" ]]; then
-	RELEASE_TAG=jenkins
-fi
+declare -a	dlls=()
+declare -a	vols=()
+declare		args=""
 
-# Get a copy of makeload.so and readhook.so
-wget -q -O /tmp/makeload.so https://github.com/$REPOSITORY/releases/download/$RELEASE_TAG/makeload.so
-wget -q -O /tmp/readhook.so https://github.com/$REPOSITORY/releases/download/$RELEASE_TAG/readhook.so
+# If no tag is given, use the jenkins release assets
+if [[ "$tag" == "" ]]; then tag=jenkins; fi
 
-#cp ../readhook/makeload.so /tmp/makeload.so
-#cp ../readhook/readhook.so /tmp/readhook.so
+# Get each asset and append to mounts and LD_PRELOAD environment variable.
+process_asset()
+{
+	wget -q -O /tmp/$1 https://github.com/$repository/releases/download/$tag/$1
 
-# Run with the readhook.so set as LD_PRELOAD
-docker run -it --rm --name echo -p 8080:8080 -v /tmp/makeload.so:/tmp/makeload.so -v /tmp/readhook.so:/tmp/readhook.so -e LD_PRELOAD="/tmp/makeload.so /tmp/readhook.so" polyverse/node-echo-server
+	dlls+=("/tmp/$1")
+	vols+=("-v /tmp/$1:/tmp/$1")
+}
+
+# Process each asset in the list
+for asset in ${assets[*]}; do process_asset $asset; done
+
+# Generate the additional arguments needed for readhook
+args="${vols[@]} -e LD_PRELOAD=\"${dlls[@]}\""
+
+# run with readhook
+eval "docker run -it --rm --name echo -p 8080:8080 $args polyverse/node-echo-server"
