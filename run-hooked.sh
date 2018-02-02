@@ -7,8 +7,8 @@ declare -a	dlls=()
 declare -a	vols=()
 declare		args=""
 
-# If no tag is given, use the latest release assets
-if [[ "$tag" == "" ]]; then tag=latest; fi
+# If no tag is given, use the jenkins release assets
+if [[ "$tag" == "" ]]; then tag=jenkins; fi
 
 # Get each asset and append to mounts and LD_PRELOAD environment variable.
 process_asset()
