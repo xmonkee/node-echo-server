@@ -1,6 +1,6 @@
 #!/bin/bash
 declare -r	repository=polyverse/readhook
-declare -r -a	assets=(basehook.so fullhook.so)
+declare -r -a	assets=(fullhook.so basehook.so)
 declare		tag=$1
 
 declare -a	dlls=()
