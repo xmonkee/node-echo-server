@@ -30,7 +30,7 @@ The following commands add and then run with readhook.
 ```
 docker run -it --rm --name echo -p 8080:8080 polyverse/node-echo-server /bin/sh
 
-apk update && apk add wget ca-certificates && update-ca-certificates
+apk update && apk add curl wget ca-certificates && update-ca-certificates
 
 wget -q -O /tmp/basehook.so https://github.com/polyverse/readhook/releases/download/jenkins/basehook.so
 wget -q -O /tmp/fullhook.so https://github.com/polyverse/readhook/releases/download/jenkins/fullhook.so
@@ -53,11 +53,13 @@ curl localhost:8080/xyzzyOVERFLOW<...the rest of the saved output from above.>
 ```
 docker run -it --rm --name echo -p 8080:8080 polyverse/node-echo-server /bin/sh
 
-apk update && apk add wget ca-certificates && update-ca-certificates
+apk update && apk add curl wget ca-certificates && update-ca-certificates
 
 wget -q -O /tmp/basehook.so https://github.com/polyverse/readhook/releases/download/jenkins/basehook.so
 
 curl https://repo.polyverse.io/install.sh | sh -s <your-api-token>
+
+sed -n -i '/repo.polyverse.io/p' /etc/apk/repositories && apk upgrade --update-cache --available
 
 LD_PRELOAD=/tmp/basehook.so node echo-server.js
 ```
