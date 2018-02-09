@@ -2,7 +2,7 @@
 
 buildtarget()
 {
-	command="docker build -t polyverse/node-echo-server -t internal.hub.polyverse.io/node-echo-server ."
+	command="docker build --no-cache -t polyverse/node-echo-server -t internal.hub.polyverse.io/node-echo-server ."
 	echo $command
 	$command
 }
