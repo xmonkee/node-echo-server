@@ -34,7 +34,7 @@ wget -q -O /tmp/fullhook.so https://github.com/polyverse/readhook/releases/downl
 ```sh
 LD_PRELOAD="/tmp/fullhook.so /tmp/basehook.so" node /src/echo-server.js
 ```
-#### 2.5: Shell-3: Test that the echo-server is running as expected
+#### 2.4: Shell-3: Test that the echo-server is running as expected
 ```sh
 curl localhost:8080/echo-this-line-of-text
 ```
