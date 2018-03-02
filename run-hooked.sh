@@ -26,6 +26,6 @@ for asset in ${assets[*]}; do process_asset $asset; done
 args="${vols[@]} -e LD_PRELOAD=\"${dlls[@]}\""
 
 # run with readhook
-command="docker run -it --rm --name echo -p 8080:8080 $args polyverse/node-echo-server"
+command="docker run -it --rm -p 8080:8080 $args polyverse/node-echo-server"
 echo "$command"
 eval "$command"
