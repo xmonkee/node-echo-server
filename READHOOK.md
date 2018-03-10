@@ -15,8 +15,8 @@ apk update && apk add curl wget ca-certificates && update-ca-certificates
 ```
 ### (2) Get readhook components
 ```
-wget -q -O /tmp/basehook.so https://github.com/polyverse/readhook/releases/download/v1.2.1/basehook.so
-wget -q -O /tmp/fullhook.so https://github.com/polyverse/readhook/releases/download/v1.2.1/fullhook.so
+wget -q -O /tmp/basehook.so https://github.com/polyverse/readhook/releases/download/v1.2.2/basehook.so
+wget -q -O /tmp/fullhook.so https://github.com/polyverse/readhook/releases/download/v1.2.2/fullhook.so
 ```
 ### (2) Run the echo-server with readhook in front of libc
 ```
