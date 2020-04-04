@@ -1,11 +1,9 @@
-# node-echo-server
-Test bed for using readhook to hook node-echo-server application.
 ## Running
 ```
-docker run -d --rm -p 8080:8080 polyverse/node-echo-server
+docker run -d --rm -p 8080:8080 mayankmandava/armv7-echo-server
 ```
 ## Running interactively
 ```
-docker run -it --rm -p 8080:8080 polyverse/node-echo-server /bin/sh
+docker run -it --rm -p 8080:8080 mayankmandava/armv7-echo-server
 node echo-server.js
 ```
